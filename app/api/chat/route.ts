@@ -2,9 +2,9 @@ import { cv } from "@/data/cv";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 
-// Use v1 instead of v1beta for better compatibility with stable models
-const GEMINI_MODEL = "gemini-1.5-flash";
-const GEMINI_URL = `https://generativelanguage.googleapis.com/v1/models/${GEMINI_MODEL}:generateContent`;
+// Back to gemini-2.5-flash as requested, using v1beta
+const GEMINI_MODEL = "gemini-2.5-flash";
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 function buildSystemPrompt(): string {
   const skills = [
