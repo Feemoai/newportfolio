@@ -96,7 +96,7 @@ export default function EntryGate({ onEnter }: EntryGateProps) {
           animate={{ opacity: 1 }}
           transition={{ delay: 2.6 }}
         >
-          Ahmad Fajril Falah · {new Date().getFullYear()}
+          Ahmad Fajril Falah · 2025
         </motion.p>
       </motion.div>
     </AnimatePresence>
