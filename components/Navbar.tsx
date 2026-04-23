@@ -79,7 +79,7 @@ export default function Navbar({ onOpenChat }: NavbarProps) {
             sys://
           </span>
           <span className="font-mono text-xs text-white/80 font-semibold tracking-widest uppercase">
-            {cv.personal.first_name}
+            Feemoai
           </span>
           <span className="font-mono text-xs text-white/20 hidden md:block">
             &gt; status:{" "}
