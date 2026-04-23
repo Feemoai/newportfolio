@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Space Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "Courier New", monospace;
+  
+  --font-family-sans: var(--font-sans);
+  --font-family-mono: var(--font-mono);
+}
+
+/* ━━━━━ FONT VARIABLES ━━━━━ */
+@layer utilities {
+  .animate-marquee-left {
+    display: flex;
+    width: max-content;
+    animation: marquee-left linear infinite;
+  }
+  .animate-marquee-right {
+    display: flex;
+    width: max-content;
+    animation: marquee-right linear infinite;
+  }
+}
+
+@keyframes marquee-left {
+  from { transform: translateX(0); }
+  to { transform: translateX(-25%); }
+}
+
+@keyframes marquee-right {
+  from { transform: translateX(-25%); }
+  to { transform: translateX(0); }
+}
+
+/* ━━━━━ BASE ━━━━━ */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: #000;
+}
+
+body {
+  background: #000;
+  color: #fff;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ━━━━━ TYPOGRAPHY ━━━━━ */
+.font-mono {
+  font-family: var(--font-mono) !important;
+}
+
+/* ━━━━━ CUSTOM SCROLLBAR ━━━━━ */
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 2px;
+}
+
+/* ━━━━━ SELECTION ━━━━━ */
+::selection {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+/* ━━━━━ GLASS UTILITY ━━━━━ */
+.glass {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* ━━━━━ GLOW UTILITIES ━━━━━ */
+.glow-white {
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.06);
+}
+
+.glow-white-hover:hover {
+  box-shadow: 0 0 40px rgba(255, 255, 255, 0.08);
+}
+
+/* ━━━━━ LINE CLAMP ━━━━━ */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ━━━━━ ANIMATION UTILITIES ━━━━━ */
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* ━━━━━ FOCUS VISIBLE ━━━━━ */
+:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.3);
+  outline-offset: 2px;
+}
+
+/* ━━━━━ HEADINGS ━━━━━ */
+h1, h2, h3, h4 {
+  letter-spacing: -0.02em;
+}
