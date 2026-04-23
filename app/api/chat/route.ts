@@ -2,8 +2,8 @@ import { cv } from "@/data/cv";
 
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 
-// Use gemini-2.5-flash — confirmed available on this API key
-const GEMINI_MODEL = "gemini-2.5-flash";
+// Use gemini-1.5-flash for better stability in production
+const GEMINI_MODEL = "gemini-1.5-flash";
 const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 function buildSystemPrompt(): string {
@@ -158,9 +158,9 @@ export async function POST(req: Request) {
         }),
       });
 
-      // Rate limited — retry
-      if (res.status === 429) {
-        lastError = `429 rate limit (attempt ${attempt + 1})`;
+      // Rate limited (429) or Service Unavailable (503) — retry
+      if (res.status === 429 || res.status === 503) {
+        lastError = `${res.status} error (attempt ${attempt + 1})`;
         console.warn(`[chat] ${lastError}`);
         continue;
       }
