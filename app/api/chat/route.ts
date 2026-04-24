@@ -1,8 +1,16 @@
 import { cv } from "@/data/cv";
 
+<<<<<<< HEAD
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
 const MODEL = "openai/gpt-oss-120b:free";
+=======
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
+
+// Back to gemini-2.5-flash as requested, using v1beta
+const GEMINI_MODEL = "gemini-2.5-flash";
+const GEMINI_URL = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+>>>>>>> 491785452a4746a50ba844fced8d18e9c8c1c075
 
 function buildSystemPrompt(): string {
   const skills = [
@@ -149,9 +157,44 @@ export async function POST(req: Request) {
       }),
     });
 
+<<<<<<< HEAD
     if (!res.ok) {
       const errBody = await res.json().catch(() => ({}));
       throw new Error(`OpenRouter ${res.status}: ${JSON.stringify(errBody)}`);
+=======
+      const res = await fetch(`${GEMINI_URL}?key=${GEMINI_API_KEY}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents,
+          generationConfig: {
+            temperature: 0.8,
+            maxOutputTokens: 512,
+            topP: 0.9,
+          },
+        }),
+      });
+
+      // Rate limited (429) or Service Unavailable (503) — retry
+      if (res.status === 429 || res.status === 503) {
+        lastError = `${res.status} error (attempt ${attempt + 1})`;
+        console.warn(`[chat] ${lastError}`);
+        continue;
+      }
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        throw new Error(`Gemini ${res.status}: ${JSON.stringify(errBody)}`);
+      }
+
+      const data = await res.json();
+      const text: string =
+        data?.candidates?.[0]?.content?.parts?.[0]?.text ?? "";
+
+      if (!text) throw new Error("Empty response from Gemini");
+
+      return Response.json({ text });
+>>>>>>> 491785452a4746a50ba844fced8d18e9c8c1c075
     }
 
     const data = await res.json();

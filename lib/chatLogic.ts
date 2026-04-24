@@ -28,7 +28,7 @@ export function generateResponse(userInput: string): string {
 
   // Greeting
   if (matchKeywords(input, ["hello", "hi", "hey", "halo", "hai", "greetings", "p", "heyyo"])) {
-    return `Halo sobat! Aku FeemoAI, asisten chatbot kerennya **${cv.personal.full_name}**. Tanya-tanya soal skills, projects, atau pengalamannya yuk, pasti seru! ✨`;
+    return `Halooo! Aku FeemoAI, asisten chatbot kerennya **${cv.personal.full_name}**. Tanya-tanya soal skills, projects, atau pengalamannya yuk, pasti seru! ✨`;
   }
 
   // Name
