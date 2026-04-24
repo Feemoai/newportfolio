@@ -59,7 +59,7 @@ export default function Gallery() {
             </h2>
             
             <p className="text-white/30 text-sm max-w-md leading-relaxed mb-8">
-              Saya sedang mengkurasi karya gambar dan dokumentasi terbaik untuk ditampilkan di sini. Stay tuned!
+              Saya sedang proses mengkurasi karya gambar dan dokumentasi terbaik untuk ditampilkan di sini. Tunggu updatenya yahh!
             </p>
 
             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08]">

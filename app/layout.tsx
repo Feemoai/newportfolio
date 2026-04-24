@@ -15,7 +15,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Ahmad Fajril Falah — Portfolio",
+  title: "Feemoai - Portfolio",
   description:
     "Computer Engineering Student & Aspiring Web Developer. Cinematic digital portfolio of Ahmad Fajril Falah.",
   keywords: ["Ahmad Fajril Falah", "Portfolio", "Web Developer", "Computer Engineering"],
