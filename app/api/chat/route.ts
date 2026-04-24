@@ -2,7 +2,11 @@ import { cv } from "@/data/cv";
 
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY || "";
 const OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions";
-const MODEL = "openai/gpt-oss-120b:free";
+
+// List of models to try in order of preference (OpenAI only as requested)
+const MODELS = [
+  "openai/gpt-oss-120b:free",
+];
 
 function buildSystemPrompt(): string {
   const skills = [
@@ -131,45 +135,57 @@ export async function POST(req: Request) {
     })),
   ];
 
-  try {
-    const res = await fetch(OPENROUTER_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-        "HTTP-Referer": "https://fajrilfalah.vercel.app", // Optional
-        "X-Title": "Fajril Portfolio", // Optional
-      },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: openRouterMessages,
-        temperature: 0.8,
-        max_tokens: 512,
-        top_p: 0.9,
-      }),
-    });
+  let lastError = "";
 
-    if (!res.ok) {
-      const errBody = await res.json().catch(() => ({}));
-      throw new Error(`OpenRouter ${res.status}: ${JSON.stringify(errBody)}`);
+  // Try models one by one
+  for (const model of MODELS) {
+    try {
+      const res = await fetch(OPENROUTER_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+          "HTTP-Referer": "https://fajrilfalah.vercel.app",
+          "X-Title": "Fajril Portfolio",
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: openRouterMessages,
+          temperature: 0.8,
+          max_tokens: 512,
+          top_p: 0.9,
+        }),
+      });
+
+      if (!res.ok) {
+        const errBody = await res.json().catch(() => ({}));
+        console.warn(`[chat/route] Model ${model} failed with status ${res.status}:`, errBody);
+        lastError = `OpenRouter ${res.status}: ${JSON.stringify(errBody)}`;
+        continue; // Try next model
+      }
+
+      const data = await res.json();
+      const text: string = data?.choices?.[0]?.message?.content ?? "";
+
+      if (!text) {
+        console.warn(`[chat/route] Model ${model} returned empty text.`);
+        continue;
+      }
+
+      return Response.json({ text });
+    } catch (error) {
+      lastError = error instanceof Error ? error.message : String(error);
+      console.error(`[chat/route] Error with model ${model}:`, lastError);
+      continue; // Try next model
     }
-
-    const data = await res.json();
-    const text: string = data?.choices?.[0]?.message?.content ?? "";
-
-    if (!text) throw new Error("Empty response from OpenRouter");
-
-    return Response.json({ text });
-  } catch (error) {
-    const errMsg = error instanceof Error ? error.message : String(error);
-    console.error("[chat/route] Gemini error:", errMsg);
-
-    // Always gracefully fallback to local CV data
-    const fallback = getLocalFallback(lastUserMessage);
-    return Response.json({
-      text: fallback ?? getGenericFallback(),
-    });
   }
+
+  // If all models fail, fallback to local data
+  console.error("[chat/route] All models failed. Last error:", lastError);
+  const fallback = getLocalFallback(lastUserMessage);
+  return Response.json({
+    text: fallback ?? getGenericFallback(),
+  });
 }
 
 // Generic helpful response when nothing else matches
